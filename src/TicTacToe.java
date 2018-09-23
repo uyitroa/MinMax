@@ -37,14 +37,14 @@ public class TicTacToe {
 			return new int[]{-1, -1, -1, -1}; // stop the method without any result
 
 		int[] coord = {-1, -1, -1, 0}; // coord[2] is pointMin
-
+		int[] result = {-1, -1, -1, -1};
 		for(int x = 0; x < board.length; x++) {
 			for(int y = 0; y < board.length; y++) {
 				if(board[x][y] == 0) {
 					board[x][y] = turn;
 
 					// initialize coord if it's uninitialized
-					if(coord[0] == -1) {
+					if(coord[0] == -1 || result[3] == -1) {
 						coord[0] = x;
 						coord[1] = y;
 						coord[2] = pointMin;
@@ -68,7 +68,8 @@ public class TicTacToe {
 						tempTurn = 1;
 
 					// min max here
-					int[] result = choose(player, tempTurn, point+1, pointMin, currentDepth + 1, depthMax);
+					result = choose(player, tempTurn, point+1, pointMin, currentDepth + 1, depthMax);
+
 					if(result[0] != -1) { // if it actually played
 						if((result[2] < pointMin && result[3] == 1) || pointMin == -1) { // check if it's a better solution
 							pointMin = result[2];
