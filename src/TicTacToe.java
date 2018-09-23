@@ -8,7 +8,7 @@ public class TicTacToe {
 		random = new Random();
 	}
 
-	public boolean check(int row, int column, int player) {
+	public boolean tick(int row, int column, int player) {
 
 		if(board[row][column] != 0)
 			return false;
@@ -28,10 +28,8 @@ public class TicTacToe {
 	 * @return array coord  int[0] row, int[1] column, int[2] pointMin, int[3] draw : 0, win : 1, lose : -1
 	 */
 	public int[] choose(int player, int turn, int point, int pointMin, int currentDepth, int depthMax) {
-		if(currentDepth == depthMax) {
-			System.out.println("depth reached");
+		if(currentDepth == depthMax)
 			return new int[]{-1, -1, -1, -1}; // stop the method without any result
-		}
 
 		if(point > pointMin && pointMin != -1)
 			return new int[]{-1, -1, -1, -1}; // stop the method without any result

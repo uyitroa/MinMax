@@ -20,12 +20,12 @@ public class Program {
 					System.out.print("Choose column: ");
 					int x = input.nextInt();
 
-					valid = !(ticTacToe.check(y, x, turn));
+					valid = !(ticTacToe.tick(y, x, turn));
 					turn = 2;
 				}
 			} else if(turn == 2) {
 				int[] coord = ticTacToe.choose(turn, turn, 0, -1, 0, 10);
-				ticTacToe.check(coord[0], coord[1], turn);
+				ticTacToe.tick(coord[0], coord[1], turn);
 
 				turn = 1;
 			}
