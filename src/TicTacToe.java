@@ -25,7 +25,7 @@ public class TicTacToe {
 	 * @param pointMin      most optimal point that can get
 	 * @param currentDepth  level of difficulty
 	 * @param depthMax
-	 * @return array coord  int[0] row, int[1] column, int[2] pointMin, int[3] draw : 0, win: 1
+	 * @return array coord  int[0] row, int[1] column, int[2] pointMin, int[3] draw : 0, win : 1, lose : -1
 	 */
 	public int[] choose(int player, int turn, int point, int pointMin, int currentDepth, int depthMax) {
 		if(currentDepth == depthMax) {
@@ -43,7 +43,7 @@ public class TicTacToe {
 				if(board[x][y] == 0) {
 					board[x][y] = turn;
 
-					// initialize coord if it's uninitialized
+					// initialize coord if it's uninitialized or the previous move is bad
 					if(coord[0] == -1 || result[3] == -1) {
 						coord[0] = x;
 						coord[1] = y;
