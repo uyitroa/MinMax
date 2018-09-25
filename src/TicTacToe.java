@@ -79,6 +79,7 @@ public class TicTacToe {
 							coord[0] = x;
 							coord[1] = y;
 							coord[2] = result[2];
+							coord[3] = result[3];
 						}
 
 
