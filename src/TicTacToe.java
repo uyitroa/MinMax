@@ -87,8 +87,7 @@ public class TicTacToe {
 						result = choose(player, tempTurn, point + 1, pointMin, currentDepth + 1, depthMax);
 						if (coord[0] == x && coord[1] == y)
 							coord[3] = result[3]; // update status win or lose for the current coord
-
-
+						
 
 						if (result[0] != -1) { // if it actually played
 							// random choice if the next move is not worse than the current move
