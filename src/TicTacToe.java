@@ -36,6 +36,14 @@ public class TicTacToe {
 
 		int[] coord = {-1, -1, -1, 0}; // coord[2] is pointMin
 		int[] result = {-1, -1, -1, 0};
+
+		/*
+		 * firstLost set to true when we can lose
+		 * and if firstLost is true and we lose in another coord
+		 * then there's no way to block it
+		 * choose another move
+		 */
+		boolean firstLost = false;
 		for(int x = 0; x < board.length; x++) {
 			for(int y = 0; y < board.length; y++) {
 				if(board[x][y] == 0) {
@@ -56,7 +64,11 @@ public class TicTacToe {
 						return new int[]{x, y, point, 1};
 					} else if(winner != 0) {
 						board[x][y] = 0;
-						return new int[]{-1, -1, point, -1};
+						/*return new int[]{-1, -1, point, -1};*/
+						if(!firstLost)
+							firstLost = true;
+						else
+							return new int[]{-1, -1, point, -2};
 					}
 
 					// change turn
@@ -66,27 +78,39 @@ public class TicTacToe {
 					else
 						tempTurn = 1;
 
-					// min max here
-					result = choose(player, tempTurn, point + 1, pointMin, currentDepth + 1, depthMax);
-					if(coord[0] == x && coord[1] == y)
-						coord[3] = result[3]; // update status win or lose for the current coord
+					/*
+					 * when firstLost is true, we will only focus on finding another possibility that we can lose
+					 */
 
-					if(result[0] != -1) { // if it actually played
-						// random choice if the next move is not worse than the current move
-						boolean choice = result[2] == pointMin && random.nextInt(2) == 1;
-						if((result[2] < pointMin && result[3] == 1) || pointMin == -1 || choice) { // check if it's a better solution
-							pointMin = result[2];
-							coord[0] = x;
-							coord[1] = y;
-							coord[2] = result[2];
+					if(!firstLost) {
+						// min max here
+						result = choose(player, tempTurn, point + 1, pointMin, currentDepth + 1, depthMax);
+						if (coord[0] == x && coord[1] == y)
+							coord[3] = result[3]; // update status win or lose for the current coord
+
+
+
+						if (result[0] != -1) { // if it actually played
+							// random choice if the next move is not worse than the current move
+							boolean choice = result[2] == pointMin && random.nextInt(2) == 1;
+
+							if ((result[2] < pointMin && result[3] == 1) || pointMin == -1 || choice) { // check if it's a better solution
+								pointMin = result[2];
+								coord[0] = x;
+								coord[1] = y;
+								coord[2] = result[2];
+								coord[3] = result[3];
+							}
+
+
 						}
-
-
 					}
 					board[x][y] = 0;
 				}
 			}
 		}
+		if(firstLost)
+			return new int[]{-1, -1, point, -1};
 		return coord;
 	}
 
