@@ -52,11 +52,18 @@ public class TicTacToe {
 
 					// initialize coord if it's uninitialized or the previous move is bad
 
-					if(coord[0] == -1 || coord[3] == -1 || coord[3] == -2) {
+					if((coord[0] == -1 && coord[3] != -2) || coord[3] == -1) {
 						coord[0] = x;
 						coord[1] = y;
 						coord[2] = pointMin;
 						coord[3] = 0;
+					}
+
+					if(coord[3] == -2) {
+						coord[0] = x;
+						coord[1] = y;
+						coord[2] = pointMin;
+						coord[3] = 2; // more priority than 1.
 					}
 
 					int winner = win();
@@ -72,20 +79,16 @@ public class TicTacToe {
 							return new int[]{-1, -1, point, -2};
 					}
 
-					// change turn
-					int tempTurn;
-					if(turn == 1)
-						tempTurn = 2;
-					else
-						tempTurn = 1;
-
 					/*
 					 * when firstLost is true, we will only focus on finding another possibility that we can lose
 					 */
 
 					if(!firstLost) {
 						// min max here
-						result = choose(player, tempTurn, point + 1, pointMin, currentDepth + 1, depthMax);
+						if(turn == 1)
+							result = choose(player, 2, point + 1, pointMin, currentDepth + 1, depthMax);
+						else
+							result = choose(player, 1, point + 1, pointMin, currentDepth + 1, depthMax);
 						if (coord[0] == x && coord[1] == y)
 							coord[3] = result[3]; // update status win or lose for the current coord
 
@@ -93,10 +96,11 @@ public class TicTacToe {
 						// if it's impossible to block which means result[3] == -2, and the turn is not player, return
 						if(result[3] == -2 && turn != player) {
 							board[x][y] = 0;
-							return new int[]{-1, -1, point, -1};
+							return new int[]{-1, -1, point, -2};
 						}
 
-						if (result[0] != -1) { // if it actually played
+						// if it actually played and there's no impossible toblock move
+						if (result[0] != -1 && coord[3] != 2) {
 							// random choice if the next move is not worse than the current move
 							boolean choice = result[2] == pointMin && random.nextInt(2) == 1 && result[3] == 1;
 
