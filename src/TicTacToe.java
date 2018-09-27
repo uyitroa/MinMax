@@ -12,14 +12,21 @@ public class TicTacToe {
 		boolean firstLost = false;
 		for (int x = 0; x < board.length; x++) {
 			for (int y = 0; y < board.length; y++) {
-				board[x][y] = player;
-				if(win() == player) {
-					if(firstLost)
-						return true;
-					else
-						firstLost = true;
+
+				if(board[x][y] == 0) {
+					board[x][y] = player;
+
+					if (win() == player) {
+						if (firstLost) {
+							board[x][y] = 0;
+							return true;
+						}
+						else
+							firstLost = true;
+					}
+
+					board[x][y] = 0;
 				}
-				board[x][y] = 0;
 			}
 		}
 		return false;
@@ -114,8 +121,10 @@ public class TicTacToe {
 							coord[3] = 0;
 					}
 
-					if (cannotBlock(player))
+					if (cannotBlock(player)) {
+						board[x][y] = 0;
 						return new int[]{-1, -1, point, -2};
+					}
 
 					int winner = win();
 					if(winner == player) {
