@@ -28,7 +28,7 @@ public class Program {
 					turn = 2;
 				}
 			} else if (turn == 2) {
-				int[] coord = ticTacToe.choose(turn, turn, 0, -1, 0, 10);
+				int[] coord = ticTacToe.choose(/*turn, */turn/*, 0, -1, 0, 10*/);
 				ticTacToe.tick(coord[0], coord[1], turn);
 
 				turn = 1;
@@ -51,7 +51,7 @@ public class Program {
 				turn = 2;
 			else
 				turn = 1;
-			int[] coord = ticTacToe.choose(turn , turn, 0, -1, 0, 10);
+			int[] coord = ticTacToe.choose(/*turn , */turn/*, 0, -1, 0, 10*/);
 			ticTacToe.tick(coord[0], coord[1], turn);
 			ticTacToe.printBoard();
 			try {
