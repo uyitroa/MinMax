@@ -64,6 +64,8 @@ public class TicTacToe {
 	public int[] choose(int turn) {
 		return choose(turn, 0);
 	}
+
+
 	/**
 	 *
 	 * @param turn          current turn
@@ -93,6 +95,8 @@ public class TicTacToe {
 							board[x][y] = 0;
 							return coord;
 						}
+						coord[0] = x;
+						coord[0] = y;
 						coord[2] = WIN;
 						firstWin = true;
 					}
@@ -160,6 +164,16 @@ public class TicTacToe {
 							coord[0] = x;
 							coord[1] = y;
 							coord[2] = WIN;
+						}
+
+						// if double win then no need to check more
+						if (result[2] == DOUBLE_LOSE && coord[2] != BLOCK) {
+							coord[0] = x;
+							coord[1] = y;
+							coord[2] = DOUBLE_WIN;
+							board[x][y] = 0;
+							return coord;
+
 						}
 					}
 					board[x][y] = 0;
