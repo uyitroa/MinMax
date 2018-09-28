@@ -35,7 +35,6 @@ public class TicTacToe {
 			return new int[]{-1, -1, -1, 0}; // stop the method without any result
 
 		int[] coord = {-1, -1, -1, 0}; // coord[2] is pointMin
-		int[] result = {-1, -1, -1, 0};
 
 		/*
 		 * firstLost set to true when we can lose
@@ -56,7 +55,10 @@ public class TicTacToe {
 						coord[0] = x;
 						coord[1] = y;
 						coord[2] = pointMin;
-						coord[3] = 0;
+						if(coord[3] == -2)
+							coord[3] = 2;
+						else
+							coord[3] = 0;
 					}
 
 					int winner = win();
@@ -85,7 +87,7 @@ public class TicTacToe {
 
 					if(!firstLost) {
 						// min max here
-						result = choose(player, tempTurn, point + 1, pointMin, currentDepth + 1, depthMax);
+						int[] result = choose(player, tempTurn, point + 1, pointMin, currentDepth + 1, depthMax);
 						if (coord[0] == x && coord[1] == y)
 							coord[3] = result[3]; // update status win or lose for the current coord
 
@@ -93,7 +95,7 @@ public class TicTacToe {
 						// if it's impossible to block which means result[3] == -2, and the turn is not player, return
 						if(result[3] == -2 && turn != player) {
 							board[x][y] = 0;
-							return new int[]{-1, -1, point, -1};
+							return new int[]{-1, -1, point, -2};
 						}
 
 						if (result[0] != -1) { // if it actually played
