@@ -9,6 +9,7 @@ public class TicTacToe {
 	private final int DOUBLE_WIN = 2;
 	private final int DIRECT_DOUBLE_WIN = -3;
 	private final int BLOCK = 3;
+	private final int UNINTIALIZE = -4;
 
 	private int[][] board = {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}};
 
@@ -27,18 +28,18 @@ public class TicTacToe {
 
 	public int win() {
 		// check column and row
-		for(int x = 0; x < board.length; x++) {
-			if(board[0][x] == board[1][x] && board[0][x] == board[2][x] && board[0][x] != 0)
+		for (int x = 0; x < board.length; x++) {
+			if (board[0][x] == board[1][x] && board[0][x] == board[2][x] && board[0][x] != 0)
 				return board[0][x];
-			if(board[x][0] == board[x][1] && board[x][0] == board[x][2] && board[x][0] != 0)
+			if (board[x][0] == board[x][1] && board[x][0] == board[x][2] && board[x][0] != 0)
 				return board[x][0];
 		}
 
 		// check diagonal
-		if(board[0][0] == board[1][1] && board[0][0] == board[2][2] && board[0][0] != 0)
+		if (board[0][0] == board[1][1] && board[0][0] == board[2][2] && board[0][0] != 0)
 			return board[0][0];
 
-		if(board[0][2] == board[1][1] && board[0][2] == board[2][0] && board[0][2] != 0)
+		if (board[0][2] == board[1][1] && board[0][2] == board[2][0] && board[0][2] != 0)
 			return board[0][2];
 		return 0;
 	}
@@ -74,19 +75,19 @@ public class TicTacToe {
 	public int[] choose(int turn, int depth) {
 
 		// coordinate of best move
-		int[] coord = {-1, -1, 0};
+		int[] coord = {UNINTIALIZE, UNINTIALIZE, UNINTIALIZE};
 
 		boolean firstWin = false;
-		for(int x = 0; x < board.length; x++) {
-			for(int y = 0; y < board.length; y++) {
-				if(board[x][y] == 0) {
+		for (int x = 0; x < board.length; x++) {
+			for (int y = 0; y < board.length; y++) {
+				if (board[x][y] == 0) {
 					board[x][y] = turn;
 
 					// Initialize coord if it's not initialized
-					if (coord[0] == -1 || coord[2] == DOUBLE_LOSE) {
+					if (coord[0] == UNINTIALIZE || coord[2] == DOUBLE_LOSE) {
 						coord[0] = x;
 						coord[1] = y;
-						// coord[2] will be updated later
+						coord[2] = UNINTIALIZE;
 					}
 
 					if (win() == turn) {
@@ -96,7 +97,7 @@ public class TicTacToe {
 							return coord;
 						}
 						coord[0] = x;
-						coord[0] = y;
+						coord[1] = y;
 						coord[2] = WIN;
 						firstWin = true;
 					}
@@ -117,7 +118,7 @@ public class TicTacToe {
 
 						// update status of the current best move
 						// check if current x, y is the best move
-						if (coord[0] == x && coord[1] == y) {
+						if (coord[0] == x && coord[1] == y && coord[2] == UNINTIALIZE) {
 							switch (result[2]) {
 								case LOSE:
 									coord[2] = WIN;
@@ -133,8 +134,7 @@ public class TicTacToe {
 
 								case DOUBLE_LOSE:
 									coord[2] = DOUBLE_WIN;
-									board[x][y] = 0;
-									return coord;
+									break;
 
 								case DOUBLE_WIN:
 									coord[2] = DOUBLE_LOSE;
@@ -171,8 +171,6 @@ public class TicTacToe {
 							coord[0] = x;
 							coord[1] = y;
 							coord[2] = DOUBLE_WIN;
-							board[x][y] = 0;
-							return coord;
 
 						}
 					}
