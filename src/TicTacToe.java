@@ -4,6 +4,7 @@ public class TicTacToe {
 /*	private Random random;*/
 	private final int NORMAL = 0;
 	private final int LOSE = -1;
+	private final int DIRECT_WIN = 4;
 	private final int WIN = 1;
 	private final int BLOCK = 2;
 	private final int CANNOT_BLOCK = 3;
@@ -75,6 +76,8 @@ public class TicTacToe {
 		// coordinate of best move
 		int[] coord = {UNINTIALIZE, UNINTIALIZE, UNINTIALIZE};
 
+		int nDirectWin = 0;
+
 		for (int x = 0; x < board.length; x++) {
 			for (int y = 0; y < board.length; y++) {
 				if (board[x][y] == 0) {
@@ -90,7 +93,7 @@ public class TicTacToe {
 					if (win() == turn) {
 						coord[0] = x;
 						coord[1] = y;
-						coord[2] = WIN;
+						coord[2] = DIRECT_WIN;
 						board[x][y] = 0;
 						return coord;
 					}
@@ -124,6 +127,11 @@ public class TicTacToe {
 								coord[2] = LOSE;
 								break;
 
+							case DIRECT_WIN:
+								coord[2] = LOSE;
+								nDirectWin++;
+								break;
+
 							case BLOCK:
 								coord[2] = NORMAL;
 								break;
@@ -135,13 +143,11 @@ public class TicTacToe {
 						}
 					}
 
-					// double lose
-					if (opponent[2] == WIN && coord[2] == BLOCK) {
+					if (nDirectWin == 2) {
 						coord[2] = CANNOT_BLOCK;
 						board[x][y] = 0;
 						return coord;
 					}
-
 					// if the opponent wins, then block it
 					if (coord[2] == LOSE) {
 						coord[0] = opponent[0];
