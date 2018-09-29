@@ -70,7 +70,7 @@ public class TicTacToe {
 	/**
 	 *
 	 * @param turn          current turn
-	 * @return array coord  int[0] row, int[1] column, int[3] draw : 0, win : 1, lose : -1
+	 * @return array coord  int[0] row, int[1] column, int[3] status
 	 */
 	public int[] choose(int turn, int depth) {
 
