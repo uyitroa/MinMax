@@ -114,12 +114,12 @@ public class TicTacToe {
 					// if turn are not winning then continue the recursion
 					// min max here
 					if (!firstWin) {
-						int[] result = choose(tmpTurn, depth + 1);
+						int[] opponent = choose(tmpTurn, depth + 1);
 
 						// update status of the current best move
 						// check if current x, y is the best move
 						if (coord[0] == x && coord[1] == y && coord[2] == UNINTIALIZE) {
-							switch (result[2]) {
+							switch (opponent[2]) {
 								case LOSE:
 									coord[2] = WIN;
 									break;
@@ -152,22 +152,29 @@ public class TicTacToe {
 							}
 						}
 
+						// double lose
+						if (opponent[2] == WIN && coord[2] == BLOCK) {
+							coord[2] = DIRECT_DOUBLE_WIN;
+							board[x][y] = 0;
+							return coord;
+						}
+
 						// if the opponent wins, then block it
 						if (coord[2] == LOSE) {
-							coord[0] = result[0];
-							coord[1] = result[1];
+							coord[0] = opponent[0];
+							coord[1] = opponent[1];
 							coord[2] = BLOCK;
 						}
 
-						// if this move allow us to win which means result[2] (the opponent status) is lose
-						if (result[2] == LOSE && coord[2] != BLOCK && coord[2] != DOUBLE_WIN) {
+						// if this move allow us to win which means opponent[2] (the opponent status) is lose
+						if (opponent[2] == LOSE && coord[2] != BLOCK && coord[2] != DOUBLE_WIN) {
 							coord[0] = x;
 							coord[1] = y;
 							coord[2] = WIN;
 						}
 
 						// if double win then no need to check more
-						if (result[2] == DOUBLE_LOSE && coord[2] != BLOCK) {
+						if (opponent[2] == DOUBLE_LOSE && coord[2] != BLOCK) {
 							coord[0] = x;
 							coord[1] = y;
 							coord[2] = DOUBLE_WIN;
