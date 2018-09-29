@@ -5,10 +5,11 @@ public class TicTacToe {
 	private final int NORMAL = 0;
 	private final int LOSE = -1;
 	private final int DIRECT_WIN = 4;
+	private final int DIRECT_LOSE = -4;
 	private final int WIN = 1;
 	private final int BLOCK = 2;
 	private final int CANNOT_BLOCK = 3;
-	private final int UNINTIALIZE = -4;
+	private final int UNINTIALIZE = -5;
 
 	private int[][] board = {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}};
 
@@ -84,7 +85,7 @@ public class TicTacToe {
 					board[x][y] = turn;
 
 					// Initialize coord if it's not initialized
-					if (coord[0] == UNINTIALIZE) {
+					if (coord[0] == UNINTIALIZE || coord[2] == LOSE) {
 						coord[0] = x;
 						coord[1] = y;
 						coord[2] = UNINTIALIZE;
@@ -128,7 +129,7 @@ public class TicTacToe {
 								break;
 
 							case DIRECT_WIN:
-								coord[2] = LOSE;
+								coord[2] = DIRECT_LOSE;
 								nDirectWin++;
 								break;
 
@@ -149,7 +150,7 @@ public class TicTacToe {
 						return coord;
 					}
 					// if the opponent wins, then block it
-					if (coord[2] == LOSE) {
+					if (coord[2] == DIRECT_LOSE) {
 						coord[0] = opponent[0];
 						coord[1] = opponent[1];
 						coord[2] = BLOCK;
