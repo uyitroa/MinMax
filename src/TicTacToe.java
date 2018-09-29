@@ -134,7 +134,8 @@ public class TicTacToe {
 
 								case DOUBLE_LOSE:
 									coord[2] = DOUBLE_WIN;
-									break;
+									board[x][y] = 0;
+									return coord;
 
 								case DOUBLE_WIN:
 									coord[2] = DOUBLE_LOSE;
@@ -178,6 +179,8 @@ public class TicTacToe {
 							coord[0] = x;
 							coord[1] = y;
 							coord[2] = DOUBLE_WIN;
+							board[x][y] = 0;
+							return coord;
 
 						}
 					}
