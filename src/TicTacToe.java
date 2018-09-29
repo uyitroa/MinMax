@@ -5,10 +5,8 @@ public class TicTacToe {
 	private final int NORMAL = 0;
 	private final int LOSE = -1;
 	private final int WIN = 1;
-	private final int DOUBLE_LOSE = -2;
-	private final int DOUBLE_WIN = 2;
-	private final int DIRECT_DOUBLE_WIN = -3;
-	private final int BLOCK = 3;
+	private final int BLOCK = 2;
+	private final int CANNOT_BLOCK = 3;
 	private final int UNINTIALIZE = -4;
 
 	private int[][] board = {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}};
@@ -77,29 +75,24 @@ public class TicTacToe {
 		// coordinate of best move
 		int[] coord = {UNINTIALIZE, UNINTIALIZE, UNINTIALIZE};
 
-		boolean firstWin = false;
 		for (int x = 0; x < board.length; x++) {
 			for (int y = 0; y < board.length; y++) {
 				if (board[x][y] == 0) {
 					board[x][y] = turn;
 
 					// Initialize coord if it's not initialized
-					if (coord[0] == UNINTIALIZE || coord[2] == DOUBLE_LOSE) {
+					if (coord[0] == UNINTIALIZE) {
 						coord[0] = x;
 						coord[1] = y;
 						coord[2] = UNINTIALIZE;
 					}
 
 					if (win() == turn) {
-						if (firstWin) {
-							coord[2] = DIRECT_DOUBLE_WIN;
-							board[x][y] = 0;
-							return coord;
-						}
 						coord[0] = x;
 						coord[1] = y;
 						coord[2] = WIN;
-						firstWin = true;
+						board[x][y] = 0;
+						return coord;
 					}
 
 					// change turn
@@ -113,77 +106,66 @@ public class TicTacToe {
 					// if turn are winning, then check another place if there's double win
 					// if turn are not winning then continue the recursion
 					// min max here
-					if (!firstWin) {
-						int[] opponent = choose(tmpTurn, depth + 1);
+					int[] opponent = choose(tmpTurn, depth + 1);
 
-						// update status of the current best move
-						// check if current x, y is the best move
-						if (coord[0] == x && coord[1] == y && coord[2] == UNINTIALIZE) {
-							switch (opponent[2]) {
-								case LOSE:
-									coord[2] = WIN;
-									break;
+					// update status of the current best move
+					// check if current x, y is the best move
+					if (coord[0] == x && coord[1] == y && coord[2] == UNINTIALIZE) {
+						switch (opponent[2]) {
+							case LOSE:
+								coord[2] = WIN;
+								break;
 
-								case NORMAL:
-									coord[2] = NORMAL;
-									break;
+							case NORMAL:
+								coord[2] = NORMAL;
+								break;
 
-								case WIN:
-									coord[2] = LOSE;
-									break;
+							case WIN:
+								coord[2] = LOSE;
+								break;
 
-								case DOUBLE_LOSE:
-									coord[2] = DOUBLE_WIN;
-									board[x][y] = 0;
-									return coord;
+							case BLOCK:
+								coord[2] = NORMAL;
+								break;
 
-								case DOUBLE_WIN:
-									coord[2] = DOUBLE_LOSE;
-									break;
-
-								case BLOCK:
-									coord[2] = NORMAL;
-									break;
-
-								// when it's too late to block it. return to outer method
-								case DIRECT_DOUBLE_WIN:
-									coord[2] = DOUBLE_LOSE;
-									board[x][y] = 0;
-									return coord;
-							}
-						}
-
-						// double lose
-						if (opponent[2] == WIN && coord[2] == BLOCK) {
-							coord[2] = DIRECT_DOUBLE_WIN;
-							board[x][y] = 0;
-							return coord;
-						}
-
-						// if the opponent wins, then block it
-						if (coord[2] == LOSE) {
-							coord[0] = opponent[0];
-							coord[1] = opponent[1];
-							coord[2] = BLOCK;
-						}
-
-						// if this move allow us to win which means opponent[2] (the opponent status) is lose
-						if (opponent[2] == LOSE && coord[2] != BLOCK && coord[2] != DOUBLE_WIN) {
-							coord[0] = x;
-							coord[1] = y;
-							coord[2] = WIN;
-						}
-
-						// if double win then no need to check more
-						if (opponent[2] == DOUBLE_LOSE && coord[2] != BLOCK) {
-							coord[0] = x;
-							coord[1] = y;
-							coord[2] = DOUBLE_WIN;
-							board[x][y] = 0;
-							return coord;
-
+							case CANNOT_BLOCK:
+								coord[2] = WIN;
+								board[x][y] = 0;
+								return coord;
 						}
 					}
+
+					// double lose
+					if (opponent[2] == WIN && coord[2] == BLOCK) {
+						coord[2] = CANNOT_BLOCK;
+						board[x][y] = 0;
+						return coord;
+					}
+
+					// if the opponent wins, then block it
+					if (coord[2] == LOSE) {
+						coord[0] = opponent[0];
+						coord[1] = opponent[1];
+						coord[2] = BLOCK;
+					}
+
+					// if this move allow us to win which means opponent[2] (the opponent status) is lose
+					if (opponent[2] == LOSE && coord[2] != BLOCK) {
+						coord[0] = x;
+						coord[1] = y;
+						coord[2] = WIN;
+						board[x][y] = 0;
+						return coord;
+					}
+
+					if(opponent[2] == CANNOT_BLOCK && coord[2] != BLOCK) {
+						coord[0] = x;
+						coord[1] = y;
+						coord[2] = WIN;
+						board[x][y] = 0;
+						return coord;
+					}
+
 					board[x][y] = 0;
 				}
 			}
