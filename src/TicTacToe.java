@@ -66,7 +66,42 @@ public class TicTacToe {
 		return choose(turn, 0);
 	}
 
+	private void updateStatus(int[] coord, int[] opponent) {
+		switch (opponent[2]) {
+			case LOSE:
+				coord[2] = WIN;
+				break;
 
+			case NORMAL:
+				coord[2] = NORMAL;
+				break;
+
+			case WIN:
+				coord[2] = LOSE;
+				break;
+
+			case DIRECT_WIN:
+				coord[2] = DIRECT_LOSE;
+				break;
+
+			case BLOCK:
+				coord[2] = NORMAL;
+				break;
+
+			case CANNOT_BLOCK:
+				coord[2] = WIN;
+				break;
+		}
+	}
+
+	private int changeTurn(int currentTurn) {
+		// change turn
+		if (currentTurn == 1)
+			return 2;
+		else
+			return 1;
+
+	}
 	/**
 	 *
 	 * @param turn          current turn
@@ -77,12 +112,9 @@ public class TicTacToe {
 		// coordinate of best move
 		int[] coord = {UNINTIALIZE, UNINTIALIZE, UNINTIALIZE};
 
-		int nDirectWin = 0;
-		int[] coordDirectWin = {UNINTIALIZE, UNINTIALIZE};
-
 		for (int x = 0; x < board.length; x++) {
 			for (int y = 0; y < board.length; y++) {
-				if (board[x][y] == 0) {
+				if (board[x][y] == 0 && x != coord[0] && y != coord[1]) {
 					board[x][y] = turn;
 
 					// Initialize coord if it's not initialized
@@ -100,13 +132,7 @@ public class TicTacToe {
 						return coord;
 					}
 
-					// change turn
-					int tmpTurn;
-					if (turn == 1)
-						tmpTurn = 2;
-					else
-						tmpTurn = 1;
-
+					int tmpTurn = changeTurn(turn);
 
 					// if turn are winning, then check another place if there's double win
 					// if turn are not winning then continue the recursion
@@ -116,65 +142,47 @@ public class TicTacToe {
 					// update status of the current best move
 					// check if current x, y is the best move
 					if (coord[0] == x && coord[1] == y && coord[2] == UNINTIALIZE) {
-						switch (opponent[2]) {
-							case LOSE:
-								coord[2] = WIN;
-								break;
-
-							case NORMAL:
-								coord[2] = NORMAL;
-								break;
-
-							case WIN:
-								coord[2] = LOSE;
-								break;
-
-							case DIRECT_WIN:
-								coord[2] = DIRECT_LOSE;
-								break;
-
-							case BLOCK:
-								coord[2] = NORMAL;
-								break;
-
-							case CANNOT_BLOCK:
-								coord[2] = WIN;
-								board[x][y] = 0;
-								return coord;
-						}
+						updateStatus(coord, opponent);
 					}
 
-					// if the opponent wins, then block it
-					if (coord[2] == DIRECT_LOSE) {
-						nDirectWin++;
+					// if the opponent wins the very next turn, then block it
+					boolean directLose = coord[2] == DIRECT_LOSE;
+					if (directLose) {
+
+						// block by updating the position of coord
 						coord[0] = opponent[0];
 						coord[1] = opponent[1];
 						coord[2] = BLOCK;
-					}
 
-					if (nDirectWin == 2) {
-						coord[2] = CANNOT_BLOCK;
-						board[x][y] = 0;
-						return coord;
-					}
 
-					// double kill : one direct and one in the future
-					if (opponent[2] == WIN && coord[2] == BLOCK) {
-						coord[2] = CANNOT_BLOCK;
+						// recheck the new position of coord
 						board[x][y] = 0;
-						return coord;
+						board[coord[0]][coord[1]] = turn;
+
+						opponent = choose(tmpTurn, depth + 1);
+						updateStatus(coord, opponent);
+
+						board[coord[0]][coord[1]] = 0;
+
+
+						// check the status
+						boolean lost = coord[2] == LOSE || coord[2] == DIRECT_LOSE;
+						if (lost) {
+							coord[2] = CANNOT_BLOCK;
+							return coord;
+						}
+
+						if (coord[2] == NORMAL)
+							coord[2] = BLOCK;
+
 					}
 
 					// if this move allow us to win which means opponent[2] (the opponent status) is lose
-					if (opponent[2] == LOSE && coord[2] != BLOCK) {
-						coord[0] = x;
-						coord[1] = y;
-						coord[2] = WIN;
-						board[x][y] = 0;
-						return coord;
-					}
+					boolean winMove = opponent[2] == LOSE && coord[2] != BLOCK;
+					// when a move that opponent cannot block. We need to verify that we are not defending
+					boolean winMove2 = opponent[2] == CANNOT_BLOCK && coord[2] != BLOCK;
 
-					if(opponent[2] == CANNOT_BLOCK && coord[2] != BLOCK) {
+					if (winMove || winMove2) {
 						coord[0] = x;
 						coord[1] = y;
 						coord[2] = WIN;
@@ -188,6 +196,8 @@ public class TicTacToe {
 		}
 		return coord;
 	}
+
+
 
 
 }
