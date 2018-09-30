@@ -7,6 +7,13 @@ public class Program {
 		humanvsbot();
 	}
 
+	private static void printWinner(int winner) {
+		if(winner == 0)
+			System.out.print("Draw");
+		else
+			System.out.print("Winner is " + winner);
+	}
+
 	private static void humanvsbot() {
 		int winner = 0;
 		int turn = 1;
@@ -37,8 +44,10 @@ public class Program {
 			winner = ticTacToe.win();
 
 		}
-		System.out.println("Winner " + winner);
+		printWinner(winner);
 	}
+
+
 
 	private static void botvsbot() {
 		int winner = 0;
@@ -62,7 +71,7 @@ public class Program {
 
 			winner = ticTacToe.win();
 		}
-		System.out.print("Winner: " + winner);
+		printWinner(winner);
 
 	}
 }
