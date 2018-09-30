@@ -177,12 +177,13 @@ public class TicTacToe {
 
 					}
 
+					boolean alreadyWinning = coord[2] == WIN || coord[2] == DIRECT_WIN;
 					// if this move allow us to win which means opponent[2] (the opponent status) is lose
 					boolean winMove = opponent[2] == LOSE && coord[2] != BLOCK;
 					// when a move that opponent cannot block. We need to verify that we are not defending
 					boolean winMove2 = opponent[2] == CANNOT_BLOCK && coord[2] != BLOCK;
 
-					if (winMove || winMove2) {
+					if ((winMove || winMove2) && !alreadyWinning) {
 						coord[0] = x;
 						coord[1] = y;
 						coord[2] = WIN;

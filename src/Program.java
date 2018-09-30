@@ -16,7 +16,7 @@ public class Program {
 
 	private static void humanvsbot() {
 		int winner = 0;
-		int turn = 1;
+		int turn = 2;
 
 		Scanner input = new Scanner(System.in);
 		while (winner == 0 && !ticTacToe.full()) {
@@ -44,6 +44,7 @@ public class Program {
 			winner = ticTacToe.win();
 
 		}
+		ticTacToe.printBoard();
 		printWinner(winner);
 	}
 
