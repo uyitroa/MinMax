@@ -78,6 +78,7 @@ public class TicTacToe {
 		int[] coord = {UNINTIALIZE, UNINTIALIZE, UNINTIALIZE};
 
 		int nDirectWin = 0;
+		int[] coordDirectWin = {UNINTIALIZE, UNINTIALIZE};
 
 		for (int x = 0; x < board.length; x++) {
 			for (int y = 0; y < board.length; y++) {
@@ -143,8 +144,14 @@ public class TicTacToe {
 						}
 					}
 
-					if (opponent[2] == DIRECT_WIN)
-						nDirectWin++;
+					if (opponent[2] == DIRECT_WIN) {
+						if (opponent[0] != coordDirectWin[0] && opponent[1] != coordDirectWin[1]) {
+							coordDirectWin[0] = opponent[0];
+							coordDirectWin[1] = opponent[1];
+							nDirectWin++;
+						}
+					}
+
 
 					if (nDirectWin == 2) {
 						coord[2] = CANNOT_BLOCK;
