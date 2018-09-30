@@ -1,6 +1,7 @@
-#To run
+###To run
 ```
-cd out/production/MinMax/
+cd src/
+javac Program.java TicTacToe.java
 java Program
 ```
 
