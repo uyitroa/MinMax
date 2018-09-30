@@ -1,7 +1,9 @@
 import java.util.Scanner;
+import java.util.Random;
 
 public class Program {
 	private static TicTacToe ticTacToe = new TicTacToe();
+	private static Random random = new Random();
 
 	public static void main(String[] args) {
 		humanvsbot();
@@ -16,7 +18,7 @@ public class Program {
 
 	private static void humanvsbot() {
 		int winner = 0;
-		int turn = 2;
+		int turn = random.nextInt(2) + 1;
 
 		Scanner input = new Scanner(System.in);
 		while (winner == 0 && !ticTacToe.full()) {
