@@ -100,8 +100,8 @@ public class TicTacToe {
 			return 2;
 		else
 			return 1;
-
 	}
+	
 	/**
 	 *
 	 * @param turn          current turn
