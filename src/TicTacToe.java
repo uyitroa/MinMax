@@ -130,7 +130,6 @@ public class TicTacToe {
 
 							case DIRECT_WIN:
 								coord[2] = DIRECT_LOSE;
-								nDirectWin++;
 								break;
 
 							case BLOCK:
@@ -144,6 +143,9 @@ public class TicTacToe {
 						}
 					}
 
+					if (opponent[2] == DIRECT_WIN)
+						nDirectWin++;
+
 					if (nDirectWin == 2) {
 						coord[2] = CANNOT_BLOCK;
 						board[x][y] = 0;
@@ -154,6 +156,13 @@ public class TicTacToe {
 						coord[0] = opponent[0];
 						coord[1] = opponent[1];
 						coord[2] = BLOCK;
+					}
+
+					// double kill
+					if (opponent[2] == WIN && coord[2] == BLOCK) {
+						coord[2] = CANNOT_BLOCK;
+						board[x][y] = 0;
+						return coord;
 					}
 
 					// if this move allow us to win which means opponent[2] (the opponent status) is lose
