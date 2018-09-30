@@ -1,13 +1,13 @@
 import java.util.Scanner;
 
 public class Program {
-	static TicTacToe ticTacToe = new TicTacToe();
+	private static TicTacToe ticTacToe = new TicTacToe();
 
 	public static void main(String[] args) {
 		humanvsbot();
 	}
 
-	public static void humanvsbot() {
+	private static void humanvsbot() {
 		int winner = 0;
 		int turn = 1;
 
@@ -40,7 +40,7 @@ public class Program {
 		System.out.println("Winner " + winner);
 	}
 
-	public static void botvsbot() {
+	private static void botvsbot() {
 		int winner = 0;
 		int turn = 1;
 

@@ -114,7 +114,7 @@ public class TicTacToe {
 
 		for (int x = 0; x < board.length; x++) {
 			for (int y = 0; y < board.length; y++) {
-				if (board[x][y] == 0 && x != coord[0] && y != coord[1]) {
+				if (board[x][y] == 0 && !(x == coord[0] && y == coord[1])) {
 					board[x][y] = turn;
 
 					// Initialize coord if it's not initialized
