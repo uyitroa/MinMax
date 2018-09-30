@@ -1,4 +1,4 @@
-###To run
+### To run
 ```
 cd src/
 javac Program.java TicTacToe.java
