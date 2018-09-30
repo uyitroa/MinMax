@@ -138,6 +138,7 @@ public class TicTacToe {
 					// if turn are not winning then continue the recursion
 					// min max here
 					int[] opponent = choose(tmpTurn, depth + 1);
+					board[x][y] = 0;
 
 					// update status of the current best move
 					// check if current x, y is the best move
@@ -156,7 +157,6 @@ public class TicTacToe {
 
 
 						// recheck the new position of coord
-						board[x][y] = 0;
 						board[coord[0]][coord[1]] = turn;
 
 						opponent = choose(tmpTurn, depth + 1);
@@ -186,11 +186,8 @@ public class TicTacToe {
 						coord[0] = x;
 						coord[1] = y;
 						coord[2] = WIN;
-						board[x][y] = 0;
 						return coord;
 					}
-
-					board[x][y] = 0;
 				}
 			}
 		}
