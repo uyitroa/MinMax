@@ -144,28 +144,21 @@ public class TicTacToe {
 						}
 					}
 
-					if (opponent[2] == DIRECT_WIN) {
-						if (opponent[0] != coordDirectWin[0] && opponent[1] != coordDirectWin[1]) {
-							coordDirectWin[0] = opponent[0];
-							coordDirectWin[1] = opponent[1];
-							nDirectWin++;
-						}
+					// if the opponent wins, then block it
+					if (coord[2] == DIRECT_LOSE) {
+						nDirectWin++;
+						coord[0] = opponent[0];
+						coord[1] = opponent[1];
+						coord[2] = BLOCK;
 					}
-
 
 					if (nDirectWin == 2) {
 						coord[2] = CANNOT_BLOCK;
 						board[x][y] = 0;
 						return coord;
 					}
-					// if the opponent wins, then block it
-					if (coord[2] == DIRECT_LOSE) {
-						coord[0] = opponent[0];
-						coord[1] = opponent[1];
-						coord[2] = BLOCK;
-					}
 
-					// double kill
+					// double kill : one direct and one in the future
 					if (opponent[2] == WIN && coord[2] == BLOCK) {
 						coord[2] = CANNOT_BLOCK;
 						board[x][y] = 0;
