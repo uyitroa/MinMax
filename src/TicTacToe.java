@@ -11,10 +11,16 @@ public class TicTacToe {
 	private final int CANNOT_BLOCK = 3;
 	private final int UNINTIALIZE = -5;
 
+
+
 	private int[][] board = {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}};
 
 	public TicTacToe() {
 /*		random = new Random();*/
+	}
+
+	public int[][] getBoard() {
+		return board;
 	}
 
 	public boolean tick(int row, int column, int player) {
@@ -61,6 +67,7 @@ public class TicTacToe {
 			System.out.print("\n");
 		}
 	}
+
 
 	public int[] choose(int turn) {
 		return choose(turn, 0);
