@@ -4,7 +4,6 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
 
-import java.util.Scanner;
 import java.util.Random;
 
 
@@ -112,15 +111,15 @@ public class Program {
 	private static int[] getInput() {
 		int x = -1;
 		int y = -1;
-		while (x < 0 || y < 0 || x > 0 || y > 0) {
+		while (x < 0 || y < 0 || x > 2 || y > 2) {
 
-			while (!Mouse.isButtonDown(0)) {
-				System.out.println(Mouse.getX());
-				System.out.println(Mouse.getY());
+			if (Mouse.isButtonDown(0)) {
+				x = Mouse.getX() / 100;
+				y = Mouse.getY() / 100;
+				System.out.println(x + " " + y);
 			}
+			Display.update();
 
-			x = Mouse.getX() / 100;
-			y = Mouse.getY() / 100;
 		}
 
 		return new int[]{x, y};
@@ -139,8 +138,8 @@ public class Program {
 				// to be sure that the player choose the valid case
 				while (valid) {
 					ticTacToe.printBoard();
+					System.out.println("OK");
 					int[] coord = getInput();
-
 					valid = !(ticTacToe.tick(coord[1], coord[0], turn));
 					turn = 2;
 				}
